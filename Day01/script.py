@@ -10,4 +10,9 @@ with open('input.txt') as f:
         else:
             calories += int(line.strip())
 
+# Part 1
 print(max(elves))
+
+# Part 2
+elves.sort(reverse=True)
+print(elves[0] + elves[1] + elves[2])
