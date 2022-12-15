@@ -5,8 +5,13 @@ with open('input.txt') as f:
 def isMarker(substring):
     return len(substring) == len(set(substring))
 
-for i in range(0,len(line)-4):
-    if isMarker(line[slice(i,i+4)]):
+# Part 1
+#marking = 4
+# Part 2
+marking = 14
+
+for i in range(0,len(line)-marking):
+    if isMarker(line[slice(i,i+marking)]):
         break
 
-print(i+4)
+print(i+marking)
