@@ -41,10 +41,23 @@ currentNode = root
 for line in lines:
     currentNode = processLine(line, currentNode)
 
-totalSize = 0
+sumOfSomeDirectorySizes = 0
 for node in [node for node in PreOrderIter(root, filter_=lambda n: hasattr(n, 'type') and n.type == 'dir')]:
     size = getDirectorySize(node)
     if size <= 100000:
-        totalSize += size
+        sumOfSomeDirectorySizes += size
 
-print(totalSize)
+# Part 1
+#print(sumOfSomeDirectorySizes)
+
+# Part 2
+freeSpace = 70000000 - getDirectorySize(root)
+sizeToFree = 30000000 - freeSpace
+directorySizes = []
+for node in [node for node in PreOrderIter(root, filter_=lambda n: hasattr(n, 'type') and n.type == 'dir')]:
+    size = getDirectorySize(node)
+    if size >= sizeToFree:
+        directorySizes.append(size)
+
+directorySizes.sort()
+print(directorySizes[0])
