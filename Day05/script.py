@@ -25,9 +25,15 @@ def extractCommands(line):
     regex = "[0-9]+"
     return [int(i) for i in re.findall(regex,str(line))]
 
-def move(containers,fromstack,tostack):
+def move_Part1(containers,fromstack,tostack):
     for i in range(0,containers):
         stacks[tostack - 1].append(stacks[fromstack - 1].pop())
+
+def move_Part2(containers,fromstack,tostack):
+        print(f"move {containers} from {stacks[fromstack - 1]} to {stacks[tostack - 1]}")
+        for container in stacks[fromstack - 1][-containers:]:
+            stacks[tostack - 1].append(container)
+        stacks[fromstack - 1] = stacks[fromstack - 1][:-containers]
 
 lines = list()
 with open('input.txt') as f:
@@ -35,7 +41,8 @@ with open('input.txt') as f:
 
 for line in lines:
     commands = extractCommands(line)
-    move(commands[0],commands[1],commands[2])
+    #move_Part1(commands[0],commands[1],commands[2])
+    move_Part2(commands[0],commands[1],commands[2])
 
 top_containers = ""
 for stack in stacks:
