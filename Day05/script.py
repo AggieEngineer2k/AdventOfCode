@@ -30,7 +30,7 @@ def move_Part1(containers,fromstack,tostack):
         stacks[tostack - 1].append(stacks[fromstack - 1].pop())
 
 def move_Part2(containers,fromstack,tostack):
-        print(f"move {containers} from {stacks[fromstack - 1]} to {stacks[tostack - 1]}")
+        #print(f"move {containers} from {stacks[fromstack - 1]} to {stacks[tostack - 1]}")
         for container in stacks[fromstack - 1][-containers:]:
             stacks[tostack - 1].append(container)
         stacks[fromstack - 1] = stacks[fromstack - 1][:-containers]
