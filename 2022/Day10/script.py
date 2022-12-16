@@ -27,4 +27,15 @@ strengths = 0
 cycles = [20,60,100,140,180,220]
 for cycle in cycles:
     strengths += cycle * registers[cycle - 1]
-print(strengths)
+print(f"Part 1: {strengths}")
+
+pixels = ''
+for i in range(len(registers)):
+    x = registers[i]
+    #print(f"i: {i % 40} x: {x}")
+    if (x-1) <= (i % 40) and (x+1) >= (i % 40):
+        pixels += 'O'
+    else:
+        pixels += ' '
+n = 40
+[print(pixels[i:i + n]) for i in range(0, len(pixels), n)]
