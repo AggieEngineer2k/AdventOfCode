@@ -1,3 +1,6 @@
+import matplotlib.pyplot as plt
+import time
+
 class Coordinate:
     x : int = 0
     y : int = 0
@@ -86,11 +89,27 @@ def moveHead(direction : str, distance : int):
     if(distance > 1):
         moveHead(direction,distance - 1)
         
+plt.ion()
+fig = plt.figure()
+ax = fig.add_subplot()
+plt.xlim([-10, 10])
+plt.ylim([-10, 10])
+line1, = ax.plot([coordinate.x for coordinate in coordinates],[coordinate.y for coordinate in coordinates],linestyle='--', marker='o')
+        
 lines = None
-with open('input.txt','r') as input:
-    lines = [line.rstrip() for line in input]
+with open('input.txt','r') as inputFile:
+    lines = [line.rstrip() for line in inputFile]
 for line in lines:
     tokens = line.split()
     moveHead(tokens[0],int(tokens[1]))
+    line1.set_xdata([coordinate.x for coordinate in coordinates])
+    line1.set_ydata([coordinate.y for coordinate in coordinates])
+    plt.xlim([min([coordinate.x for coordinate in coordinates]) - 5,max([coordinate.x for coordinate in coordinates]) + 5])
+    plt.ylim([min([coordinate.y for coordinate in coordinates]) - 5,max([coordinate.y for coordinate in coordinates]) + 5])
+    fig.canvas.draw()
+    fig.canvas.flush_events()
+    time.sleep(0.25)
 
 print(len(positions))
+
+input()
