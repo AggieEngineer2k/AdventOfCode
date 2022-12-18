@@ -18,7 +18,7 @@ class Monkey:
         #print(f"Inspecting {item}")
         item = self.operation(item)
         #print(f"Item is now {item}")
-        item = item // 3
+        #item = item // 3
         #print(f"Item is now {item}")
         test = self.test(item)
         #print(f"Test is {test}")
@@ -99,8 +99,8 @@ monkeys = [
         false_index=5)
 ]
 
-for round in range(20):
-    #print(f"Round {round}")
+for round in range(10000):
+    print(f"Round {round}")
     for monkeyIndex in range(len(monkeys)):
         monkey = monkeys[monkeyIndex]
         #print(f"Monkey {monkeyIndex} has items {monkey.items}")
