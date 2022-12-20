@@ -1,5 +1,5 @@
 import logging
-logging.basicConfig(level=logging.WARNING)
+logging.basicConfig(level=logging.WARN)
 
 class Vertex:
     def __init__(self, height : str,row : int,column : int) -> None:
@@ -22,8 +22,8 @@ class Graph:
         # Create a set for storing the vertices in the shortest path.
         self.shortest_path_tree = set()
 
-    def findVerticesByHeight(self,height : str):
-        return [(vertex,irow,icolumn) for irow, row in enumerate(self.vertices) for icolumn, vertex in enumerate(row) if vertex.height == height]
+    def findVerticesByHeight(self,height : "list[str]"):
+        return [(vertex,irow,icolumn) for irow, row in enumerate(self.vertices) for icolumn, vertex in enumerate(row) if vertex.height in height]
 
     def findUnvisitedNeighbors(self,current : Vertex):
         neighbors : list[Vertex] = []
@@ -39,7 +39,7 @@ class Graph:
         # West
         if current.column > 0:
             neighbors.append(self.vertices[current.row][current.column - 1])
-        result = [neighbor for neighbor in neighbors if current.height == 'S' or ord(neighbor.height) <= (ord(current.height) + 1) and not neighbor.visited]
+        result = [neighbor for neighbor in neighbors if (current.height == 'E' or ord(neighbor.height) >= (ord(current.height) - 1)) and not neighbor.visited]
         return result
 
     def findUnvisitedVertexWithSmallestDistance(self):
@@ -65,7 +65,6 @@ class Graph:
             logging.debug(f'Visiting ({current.row},{current.column}) at distance {current.distance}')
             distance_through_current = current.distance + 1
             for neighbor in self.findUnvisitedNeighbors(current):
-                logging.debug(f'{neighbor.distance} > {distance_through_current}')
                 if neighbor.distance > distance_through_current:
                     neighbor.distance = distance_through_current
                     neighbor.parent = current
@@ -81,8 +80,37 @@ class Graph:
             current = self.findUnvisitedVertexWithSmallestDistance()
         return end
 
+    def findShortestPaths(self,starting : str):
+        # Find the starting vertex.
+        start = self.findVerticesByHeight(starting)[0][0]
+        # Set the start vertex's distance to 0.
+        start.distance = 0
+        start.path = 'S'
+
+        # Start searching from the starting vertex and continue searching until all vertices have been visited.
+        current = start
+        while current.distance != float('inf'):
+            logging.debug(f'Visiting ({current.row},{current.column}) at distance {current.distance}')
+            distance_through_current = current.distance + 1
+            for neighbor in self.findUnvisitedNeighbors(current):
+                logging.debug(f'{neighbor.distance} > {distance_through_current}')
+                if neighbor.distance > distance_through_current:
+                    neighbor.distance = distance_through_current
+                    neighbor.parent = current
+                    if(neighbor.row < current.row):
+                        neighbor.path = '^'
+                    elif(neighbor.row > current.row):
+                        neighbor.path = 'V'
+                    elif(neighbor.column > current.column):
+                        neighbor.path = '>'
+                    elif(neighbor.column < current.column):
+                        neighbor.path = '<'
+            current.visited = True
+            current = self.findUnvisitedVertexWithSmallestDistance()
+        return
+
     def show(self):
-        #[print(' '.join([str(vertex.height) for vertex in row])) for row in self.vertices]
+        [print(' '.join([str(vertex.height) for vertex in row])) for row in self.vertices]
         #[print(' '.join(['({row},{column})'.format(row=vertex.row,column=vertex.column) for vertex in row])) for row in self.vertices]
         #[print(' '.join(['o' if vertex.visited else '.' for vertex in row])) for row in self.vertices]
         #[print(' '.join([str(vertex.distance) for vertex in row])) for row in self.vertices]
@@ -92,6 +120,16 @@ graph : Graph
 with open('input.txt','r') as inputFile:
     graph = Graph(vertices=[list(line.rstrip()) for line in inputFile])
 
-end = graph.findShortestPath(starting='S',ending='E')
+# Part 1
+#end = graph.findShortestPath(starting='S',ending='E')
 #graph.show()
-print(f"'E' is {end.distance} from 'S'.")
+#print(f"'E' is {end.distance} from 'S'.")
+
+# Part 2
+graph.findShortestPaths(starting='E')
+#graph.show()
+starting = graph.findVerticesByHeight('a')
+#starting.append(graph.findVerticesByHeight('S'))
+distances = [vertex.distance for vertex,_,_ in starting if vertex.distance != float('inf')]
+distances.sort()
+print(distances[0])
