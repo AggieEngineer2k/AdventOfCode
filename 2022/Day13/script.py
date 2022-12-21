@@ -1,4 +1,5 @@
 import ast
+from functools import cmp_to_key
 import logging
 logging.basicConfig(level=logging.WARN)
 indent_step = 2
@@ -48,14 +49,21 @@ def testPairIsInRightOrder(left, right, indent = 0) -> int:
 with open('input.txt','r') as inputFile:
     lines = [line.rstrip() for line in inputFile if line.rstrip() != '']
 
-pairs_in_right_order = []
-for i in range(len(lines) // 2):
-    logging.info(f'== Pair {i + 1} ==')
-    left = ast.literal_eval(lines[i * 2])
-    right = ast.literal_eval(lines[i * 2 + 1])
-    is_pair_in_right_order = testPairIsInRightOrder(left,right)
-    logging.debug(is_pair_in_right_order)
-    if is_pair_in_right_order == -1:
-        pairs_in_right_order.append(i + 1)
-print(f'Part 1: {pairs_in_right_order} = {sum(pairs_in_right_order)}')
+# Part 1
+# pairs_in_right_order = []
+# for i in range(len(lines) // 2):
+#     logging.info(f'== Pair {i + 1} ==')
+#     left = ast.literal_eval(lines[i * 2])
+#     right = ast.literal_eval(lines[i * 2 + 1])
+#     is_pair_in_right_order = testPairIsInRightOrder(left,right)
+#     logging.debug(is_pair_in_right_order)
+#     if is_pair_in_right_order == -1:
+#         pairs_in_right_order.append(i + 1)
+# print(f'Part 1: {pairs_in_right_order} = {sum(pairs_in_right_order)}')
 
+# Part 2
+packets = [ast.literal_eval(line) for line in lines]
+packets.append([[2]])
+packets.append([[6]])
+packets = sorted(packets,key=cmp_to_key(lambda l,r: testPairIsInRightOrder(l,r)))
+print(f"Part 2: {(packets.index([[2]]) + 1) * (packets.index([[6]]) + 1)}")
