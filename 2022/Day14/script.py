@@ -8,8 +8,12 @@ ROCK = '#'
 GRAIN = 'o'
 SAND_SETTLED = 1
 SAND_FALLING_INTO_ABYSS = 0
+SAND_BLOCKED = -1
 
-cave = [[AIR for column in range(600)] for row in range(250)]
+source_row = 0
+source_column = 500
+
+cave = [[AIR for column in range(source_column * 2)] for row in range(200)]
 Point = namedtuple('Point','row column')
 
 def addRocks(coordinates : "list[Point]"):
@@ -25,7 +29,10 @@ def addRocks(coordinates : "list[Point]"):
 
 def moveSand(point : Point, grain : int):
     logging.info(f'Grain {grain} is at ({point.row},{point.column})')
-    if point.row > 200:
+    if cave[source_row][source_column] == GRAIN:
+        logging.info(f'Grain {grain} is blocked.')
+        return SAND_BLOCKED
+    elif point.row > 200:
         logging.info(f'Grain {grain} is falling into the abyss.')
         return SAND_FALLING_INTO_ABYSS
     elif cave[point.row + 1][point.column] == AIR:
@@ -43,17 +50,24 @@ def moveSand(point : Point, grain : int):
         return SAND_SETTLED
 
 def show():
-    [print(''.join(row)) for row in cave]
+    with open('cave.txt','w') as f:
+        #[print(''.join(row) + '\n') for row in cave[:10]]
+        [f.write(''.join(row) + '\n') for row in cave]
 
 with open('input.txt','r') as inputFile:
     lines = [line.rstrip() for line in inputFile]
+
+lowest_rock = 0
 for line in lines:
     coordinates = [Point(row,column) for column,row in zip(*[iter(re.findall(r'\d+',line))]*2)]
     addRocks(coordinates)
+    lowest_rock = max(lowest_rock,max([int(point.row) for point in coordinates]))
+addRocks([Point(lowest_rock + 2,0),Point(lowest_rock + 2,len(cave[0])-1)])
 
 i = 0
 result = SAND_SETTLED
 while result == SAND_SETTLED:
     i += 1
-    result = moveSand(Point(0,500),i)
-print(f'Part 1: {i - 1} grains settled.')
+    result = moveSand(Point(source_row,source_column),i)
+show()
+print(f'{i - 1} grains settled.')
