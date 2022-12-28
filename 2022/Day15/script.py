@@ -46,8 +46,23 @@ for line in lines:
     sensor = Sensor(sensor_coord, beacon_coord)
     sensors.append(sensor)
 
-for sensor in sensors:
-    logging.info(f'{sensor.coordinate} {sensor.distance}')
-    [inspection_coordinates.add(coordinate) for coordinate in sensor.coordinatesInRange(inspection_row)]
-    
-print(f'{len(inspection_coordinates)}')
+# Part 1
+# for sensor in sensors:
+#     logging.info(f'{sensor.coordinate} {sensor.distance}')
+#     [inspection_coordinates.add(coordinate) for coordinate in sensor.coordinatesInRange(inspection_row)]
+# print(f'{len(inspection_coordinates)}')
+
+def part2(lower_limit : int, upper_limit : int):
+    for x in range(lower_limit,upper_limit):
+        for y in range(lower_limit,upper_limit):
+            logging.info(f'Inspecting ({x},{y})')
+            in_range_of_sensor = False
+            for sensor in sensors:
+                if manhattan_distance(Coordinate(x,y),sensor.coordinate) <= sensor.distance:
+                    in_range_of_sensor = True
+                    break
+            if in_range_of_sensor == False:
+                return Coordinate(x,y)
+
+coordinate = part2(0,4000000)
+print(coordinate)
