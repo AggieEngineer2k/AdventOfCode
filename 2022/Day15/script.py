@@ -1,5 +1,5 @@
 import logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 import re
 from collections import namedtuple
 
@@ -30,6 +30,14 @@ class Sensor():
         coordinates.discard(self.coordinate)
         coordinates.discard(self.beacon_coordinate)
         return coordinates
+    def coordinatesAtDistance(self, distance : int):
+        coordinates = set()
+        for d in range(0,distance + 1):
+            coordinates.add(Coordinate(self.coordinate.x - (distance - d), self.coordinate.y - d))
+            coordinates.add(Coordinate(self.coordinate.x + (distance - d), self.coordinate.y - d))
+            coordinates.add(Coordinate(self.coordinate.x - (distance - d), self.coordinate.y + d))
+            coordinates.add(Coordinate(self.coordinate.x + (distance - d), self.coordinate.y + d))
+        return coordinates
 
 sensors : 'list[Sensor]' = list()
 
@@ -46,23 +54,32 @@ for line in lines:
     sensor = Sensor(sensor_coord, beacon_coord)
     sensors.append(sensor)
 
-# Part 1
+# # Part 1
 # for sensor in sensors:
 #     logging.info(f'{sensor.coordinate} {sensor.distance}')
 #     [inspection_coordinates.add(coordinate) for coordinate in sensor.coordinatesInRange(inspection_row)]
 # print(f'{len(inspection_coordinates)}')
 
-def part2(lower_limit : int, upper_limit : int):
-    for x in range(lower_limit,upper_limit):
-        for y in range(lower_limit,upper_limit):
-            logging.info(f'Inspecting ({x},{y})')
-            in_range_of_sensor = False
-            for sensor in sensors:
-                if manhattan_distance(Coordinate(x,y),sensor.coordinate) <= sensor.distance:
-                    in_range_of_sensor = True
+# Part 2
+# Outline each sensor's region, then check each coordinate to see if it's included in at least one other sensor's region. If not, that's the distress beacon.
+def part2(minimum_coordinate, maximum_coordinate):
+    for from_sensor in sensors:
+        coordinates_at_distance = from_sensor.coordinatesAtDistance(from_sensor.distance + 1)
+        logging.debug(f'trying {len(coordinates_at_distance)} coordinates around {from_sensor.coordinate}...')
+        for coordinate in coordinates_at_distance:
+            if coordinate.x < minimum_coordinate or coordinate.x > maximum_coordinate or coordinate.y < minimum_coordinate or coordinate.y > maximum_coordinate:
+                continue
+            found_coordinate : bool = True
+            for to_sensor in sensors:
+                if from_sensor == to_sensor:
+                    continue
+                if manhattan_distance(coordinate,to_sensor.coordinate) <= to_sensor.distance:
+                    found_coordinate = False
                     break
-            if in_range_of_sensor == False:
-                return Coordinate(x,y)
+            if found_coordinate == True:
+                logging.debug(f'{coordinate} is not in range of any sensor!')
+                return coordinate
 
 coordinate = part2(0,4000000)
-print(coordinate)
+tuning_frequecy = coordinate.x * 4000000 + coordinate.y
+print(f'{tuning_frequecy}')
