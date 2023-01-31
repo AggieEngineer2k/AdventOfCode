@@ -24,7 +24,7 @@ class script:
         print(f"Day 1: {floor}")
     def day_2(self):
         floor = self.determine_instruction_that_enters_basement(self.input)
-        print(f"Day 1: {floor}")
+        print(f"Day 2: {floor}")
 
 input_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ),'input.txt'))
 with open(input_path,'r') as inputFile:
