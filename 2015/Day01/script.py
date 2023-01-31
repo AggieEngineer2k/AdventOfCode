@@ -1,22 +1,24 @@
 import os
 
 class script:
+    def floor_change(self, instruction : str):
+        if instruction == "(":
+            return 1
+        elif instruction == ")":
+            return -1
     def determine_floor(self, instructions : str):
         value = 0
         for instruction in instructions:
-            if instruction == "(":
-                value += 1
-            elif instruction == ")":
-                value -= 1
+            value += self.floor_change(instruction)
         return value
     def determine_instruction_that_enters_basement(self, instructions : str):
-        length = len(instructions)
-        for i in range(0,length):
-            subinstructions = instructions[:i + 1]
-            floor = self.determine_floor(subinstructions)
-            if floor < 0:
+        value = 0
+        for i in range(0,len(instructions)):
+            value += self.floor_change(instructions[i])
+            if value < 0:
                 return i + 1
-    def __init__(self, input):
+            i += 1
+    def __init__(self, input : str = ""):
         self.input = input
         pass
     def day_1(self):
