@@ -21,10 +21,10 @@ class script:
     def __init__(self, input : str = ""):
         self.input = input
         pass
-    def day_1(self):
+    def part_1(self):
         floor = self.determine_floor(self.input)
         print(f"Day 1: {floor}")
-    def day_2(self):
+    def part_2(self):
         floor = self.determine_instruction_that_enters_basement(self.input)
         print(f"Day 2: {floor}")
 
@@ -33,5 +33,5 @@ with open(input_path,'r') as inputFile:
     line = inputFile.read().strip()
 
 solver = script(line)
-solver.day_1()
-solver.day_2()
+solver.part_1()
+solver.part_2()
