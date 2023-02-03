@@ -1,4 +1,7 @@
 import os
+import sys
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)),os.pardir,os.pardir))
+from common.input_parser import InputParser
 
 class script:
     def floor_change(self, instruction : str):
@@ -29,9 +32,8 @@ class script:
         print(f"Day 2: {floor}")
 
 input_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ),'input.txt'))
-with open(input_path,'r') as inputFile:
-    line = inputFile.read().strip()
+input = InputParser.parse_line(input_path)
 
-solver = script(line)
+solver = script(input)
 solver.part_1()
 solver.part_2()

@@ -1,6 +1,9 @@
 import logging
 logging.basicConfig(level=logging.WARN)
 import os
+import sys
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)),os.pardir,os.pardir))
+from common.input_parser import InputParser
 import hashlib
 
 class script:
@@ -22,9 +25,8 @@ class script:
         print(f"Day 2: {number}")
 
 input_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ),'input.txt'))
-with open(input_path,'r') as inputFile:
-    line = inputFile.readline().strip()
+input = InputParser.parse_line(input_path)
 
-solver = script(line)
+solver = script(input)
 solver.day_1()
 solver.day_2()
