@@ -1,26 +1,28 @@
 import logging
 logging.basicConfig(level=logging.WARN)
 import os
+import sys
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)),os.pardir,os.pardir))
+from common.coordinate import Coordinate
 
 class Santa:
     def __init__(self):
-        self.x = 0
-        self.y = 0
+        self.coordinate = Coordinate()
         self.houses = list()
         self.add_house()
     def get_house(self):
-        return (self.x, self.y)
+        return self.coordinate.get_tuple()
     def add_house(self):
         self.houses.append(self.get_house())
     def move(self, direction : str):
         if direction == '^':
-            self.y += 1
+            self.coordinate.y += 1
         elif direction == 'v':
-            self.y -= 1
+            self.coordinate.y -= 1
         elif direction == '<':
-            self.x -= 1
+            self.coordinate.x -= 1
         elif direction == '>':
-            self.x += 1
+            self.coordinate.x += 1
         self.add_house()
         return self.get_house()
     def get_visited_houses(self):
@@ -50,7 +52,6 @@ input_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ),'input.txt
 with open(input_path,'r') as inputFile:
     line = inputFile.readline().strip()
 
-logging.debug(f'Input: {line}')
 solver = script(line)
 solver.day_1()
 solver.day_2()

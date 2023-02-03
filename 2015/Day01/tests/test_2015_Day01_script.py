@@ -1,5 +1,5 @@
 import pytest
-from Day01.script import script
+from day01.script import script
 
 @pytest.mark.parametrize("input,expected", [("(",1),(")",-1)])
 def test_floor_change(input, expected):

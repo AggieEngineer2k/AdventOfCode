@@ -1,5 +1,5 @@
 import pytest
-from Day03.script import script, Santa
+from day03.script import Santa
 
 @pytest.mark.parametrize("input,expected", [("^",(0,1)),(">",(1,0)),("v",(0,-1)),("<",(-1,0))])
 def test_Santa_move(input, expected):
