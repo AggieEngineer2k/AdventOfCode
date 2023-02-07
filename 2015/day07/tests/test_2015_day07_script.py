@@ -1,24 +1,24 @@
 import pytest
 from day07.script import Script
 
-@pytest.mark.parametrize("instruction,code", [
-    ("123 -> x","def _x() : return 123"),
-    ("456 -> y","def _y() : return 456"),
-    ("x AND y -> d","def _d() : return _x() & _y()"),
-    ("x OR y -> e","def _e() : return _x() | _y()"),
-    ("x LSHIFT 2 -> f","def _f() : return _x() << 2"),
-    ("y RSHIFT 2 -> g","def _g() : return _y() >> 2"),
-    ("NOT x -> h","def _h() : return ~_x() + 2**16"),
-    ("NOT y -> i","def _i() : return ~_y() + 2**16"),
-    ("1 AND x -> y","def _y() : return 1 & _x()"),
-    ("x -> y","def _y() : return _x()")
+@pytest.mark.parametrize("instruction,dictionary", [
+    ("123 -> x", {"x" : 123}),
+    ("456 -> y", {"y" : 456}),
+    ("x AND y -> d", {"d" : "x & y"}),
+    ("x OR y -> e", {"e" : "x | y"}),
+    ("x LSHIFT 2 -> f", {"f" : "x << 2"}),
+    ("y RSHIFT 2 -> g", {"g" : "y >> 2"}),
+    ("NOT x -> h", {"h" : "~x"}),
+    ("NOT y -> i", {"i" : "~y"}),
+    ("1 AND x -> y", {"y" : "1 & x"}),
+    ("x -> y", {"y" : "x"}),
 ])
-def test_script_get_code_from_instruction(instruction : str, code : str):
+def test_script_get_dictionary_key_value_from_instruction(instruction : str, dictionary : dict):
     script = Script()
-    actual = script.get_code_from_instruction(instruction)
-    assert actual == code
+    actual = script.get_dictionary_key_value_from_instruction(instruction)
+    assert actual == dictionary
 
-def test_script_circuit():
+def test_script_get_value_for_dictionary_key():
     script = Script()
     instructions = [
         "123 -> x",
@@ -28,25 +28,16 @@ def test_script_circuit():
         "x LSHIFT 2 -> f",
         "y RSHIFT 2 -> g",
         "NOT x -> h",
-        "NOT y -> i"
+        "NOT y -> i",
     ]
+    dictionary = {}
     for instruction in instructions:
-        code = script.get_code_from_instruction(instruction)
-        exec(code,globals())
-    local = {}
-    exec("actual = _d()",globals(),local)
-    assert local['actual'] == 72
-    exec("actual = _e()",globals(),local)
-    assert local['actual'] == 507
-    exec("actual = _f()",globals(),local)
-    assert local['actual'] == 492
-    exec("actual = _g()",globals(),local)
-    assert local['actual'] == 114
-    exec("actual = _h()",globals(),local)
-    assert local['actual'] == 65412
-    exec("actual = _i()",globals(),local)
-    assert local['actual'] == 65079
-    exec("actual = _x()",globals(),local)
-    assert local['actual'] == 123
-    exec("actual = _y()",globals(),local)
-    assert local['actual'] == 456
+        dictionary.update(script.get_dictionary_key_value_from_instruction(instruction))
+    assert script.get_value_for_dictionary_key(dictionary, "d") == dictionary["d"] == 72
+    assert script.get_value_for_dictionary_key(dictionary, "e") == dictionary["e"] == 507
+    assert script.get_value_for_dictionary_key(dictionary, "f") == dictionary["f"] == 492
+    assert script.get_value_for_dictionary_key(dictionary, "g") == dictionary["g"] == 114
+    assert script.get_value_for_dictionary_key(dictionary, "h") == dictionary["h"] == 65412
+    assert script.get_value_for_dictionary_key(dictionary, "i") == dictionary["i"] == 65079
+    assert script.get_value_for_dictionary_key(dictionary, "x") == dictionary["x"] == 123
+    assert script.get_value_for_dictionary_key(dictionary, "y") == dictionary["y"] == 456
