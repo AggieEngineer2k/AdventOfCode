@@ -39,3 +39,30 @@ def test_script_get_difference_of_characters_in_code_and_memory():
     script = Script()
     actual = script.get_difference_of_characters_in_code_and_memory(lines)
     assert actual == 12
+
+# "" encodes to "\"\"", an increase from 2 characters to 6.
+# "abc" encodes to "\"abc\"", an increase from 5 characters to 9.
+# "aaa\"aaa" encodes to "\"aaa\\\"aaa\"", an increase from 10 characters to 16.
+# "\x27" encodes to "\"\\x27\"", an increase from 6 characters to 11.
+
+@pytest.mark.parametrize("line,expected", [
+    (r'""', r'"\"\""'),
+    (r'"abc"', r'"\"abc\""'),
+    (r'"aaa\"aaa"', r'"\"aaa\\\"aaa\""'),
+    (r'"\x27"', r'"\"\\x27\""'),
+])
+def test_script_get_encoded(line : str, expected : str):
+    script = Script()
+    actual = script.get_encoded(line)
+    assert actual == expected
+
+@pytest.mark.parametrize("line,expected", [
+    (r'""', 6),
+    (r'"abc"', 9),
+    (r'"aaa\"aaa"', 16),
+    (r'"\x27"', 11),
+])
+def test_script_get_characters_in_encoded(line : str, expected : int):
+    script = Script()
+    actual = script.get_characters_in_encoded(line)
+    assert actual == expected
