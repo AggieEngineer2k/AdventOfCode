@@ -66,3 +66,15 @@ def test_script_get_characters_in_encoded(line : str, expected : int):
     script = Script()
     actual = script.get_characters_in_encoded(line)
     assert actual == expected
+
+# For example, for the strings above, the total encoded length (6 + 9 + 16 + 11 = 42) minus the characters in the original code representation (23, just like in the first part of this puzzle) is 42 - 23 = 19.
+def test_script_get_difference_of_characters_in_encoded_and_original():
+    lines = [
+        r'""',
+        r'"abc"',
+        r'"aaa\"aaa"',
+        r'"\x27"',
+    ]
+    script = Script()
+    actual = script.get_difference_of_characters_in_encoded_and_original(lines)
+    assert actual == 19
