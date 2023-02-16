@@ -24,24 +24,6 @@ def test_script_get_edge_from_text(input : str, expected : list):
     edge = script.get_edge_from_text(input)
     assert edge == expected
 
-def test_script_add_edge_to_graph():
-    script = Script()
-    # 0
-    graph = {}
-    assert graph == {}
-    # 1
-    edge = script.get_edge_from_text("London to Dublin = 464")
-    script.add_edge_to_graph(graph,edge[0],edge[1],edge[2])
-    assert graph == {"London":{"Dublin":464},"Dublin":{"London":464}}
-    # 2
-    edge = script.get_edge_from_text("London to Belfast = 518")
-    script.add_edge_to_graph(graph,edge[0],edge[1],edge[2])
-    assert graph == {"London":{"Dublin":464,"Belfast":518},"Dublin":{"London":464},"Belfast":{"London":518}}
-    # 3
-    edge = script.get_edge_from_text("Dublin to Belfast = 141")
-    script.add_edge_to_graph(graph,edge[0],edge[1],edge[2])
-    assert graph == {"London":{"Dublin":464,"Belfast":518},"Dublin":{"London":464,"Belfast":141},"Belfast":{"London":518,"Dublin":141}}
-
 @pytest.mark.parametrize("input,expected", [
     ([], {}),
     ([
@@ -57,4 +39,4 @@ def test_script_add_edge_to_graph():
 def test_script_get_graph_for_input(input : "list[str]", expected : dict):
     script = Script()
     actual = script.get_graph_for_input(input)
-    assert actual == expected
+    assert actual.dictionary == expected
