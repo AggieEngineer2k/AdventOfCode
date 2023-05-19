@@ -24,11 +24,56 @@ from day11.script import Script
     ('xbcdx',True),
     ('xcdex',True),
     ('xxyzx',True),
-    ('aabbcc',False)
+    ('aabbcc',False),
+    ('hijklmmn',True),
+    ('abbceffg',False),
 ])
 def test_check_contains_straight(input : str, expected : bool):
     script = Script()
     actual = script.check_contains_straight(input)
+    assert actual == expected
+
+@pytest.mark.parametrize('input,expected', [
+    ('i',False),
+    ('o',False),
+    ('l',False),
+    ('xix',False),
+    ('xox',False),
+    ('xlx',False),
+    ('abc',True),
+    ('hijklmmn',False),
+])
+def test_check_contains_valid_characters(input : str, expected : bool):
+    script = Script()
+    actual = script.check_contains_valid_characters(input)
+    assert actual == expected
+
+@pytest.mark.parametrize('input,expected', [
+    ('aabb',True),
+    ('abcd',False),
+    ('aaax',False),
+    ('xaaxbbx',True),
+    ('xaabbx',True),
+    ('abbceffg',True),
+    ('abbcegjk',False),
+])
+def test_check_contains_two_pairs(input : str, expected : bool):
+    script = Script()
+    actual = script.check_contains_two_pairs(input)
+    assert actual == expected
+
+@pytest.mark.parametrize('input,expected', [
+    ('hijklmmn',False),
+    ('abbceffg',False),
+    ('abbcegjk',False),
+    ('abcdefgh',False),
+    ('abcdffaa',True),
+    ('ghijklmn',False),
+    ('ghjaabcc',True),
+])
+def test_check_is_valid(input : str, expected : bool):
+    script = Script()
+    actual = script.check_is_valid(input)
     assert actual == expected
 
 @pytest.mark.parametrize('input,expected', [
@@ -54,4 +99,13 @@ def test_script_sanitize_string(input : str, expected : str):
 def test_script_increment_string(input : str, expected : str):
     script = Script()
     actual = script.increment_string(input)
+    assert actual == expected
+    
+@pytest.mark.parametrize('input,expected', [
+    ('abcdefgh','abcdffaa'),
+    ('ghijklmn','ghjaabcc'),
+])
+def test_script_get_next_password(input : str, expected : str):
+    script = Script()
+    actual = script.get_next_password(input)
     assert actual == expected
