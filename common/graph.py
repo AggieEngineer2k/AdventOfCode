@@ -5,11 +5,12 @@ class Graph:
     def __init__(self):
         self.dictionary = {}
     
-    def add_edge(self, from_node_name : str, to_node_name : str, weight : int):
+    def add_edge(self, from_node_name : str, to_node_name : str, weight : int, symmetric : bool = True):
         from_node_weights = self.dictionary.setdefault(from_node_name, {})
         from_node_weights.setdefault(to_node_name, weight)
-        to_node_weights = self.dictionary.setdefault(to_node_name, {})
-        to_node_weights.setdefault(from_node_name, weight)
+        if (symmetric):
+            to_node_weights = self.dictionary.setdefault(to_node_name, {})
+            to_node_weights.setdefault(from_node_name, weight)
 
     def get_edge_weight(self, from_node_name : str, to_node_name : str) -> int:
         return self.dictionary[from_node_name][to_node_name]
