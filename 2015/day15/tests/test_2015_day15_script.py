@@ -8,3 +8,11 @@ from day15.script import Script,Ingredient
 def test_Ingredient_init(input : str, expected : Ingredient):
     actual = Ingredient(input = input)
     assert actual == expected
+
+@pytest.mark.parametrize('amounts,ingredients,expected', [
+    ([44,56], [Ingredient('Butterscotch',-1,-2,6,3,8),Ingredient('Cinnamon',2,3,-2,-1,3)], 62842880)
+])
+def test_Script_calculate_score(amounts : "list[int]", ingredients : "list[Ingredient]", expected : int):
+    script = Script()
+    actual = script.calculate_score(amounts, ingredients)
+    assert actual == expected
