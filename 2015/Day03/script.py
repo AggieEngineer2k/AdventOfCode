@@ -17,13 +17,13 @@ class Santa:
         self.houses.append(self.get_house())
     def move(self, direction : str):
         if direction == '^':
-            self.coordinate.y += 1
+            self.coordinate = Coordinate(self.coordinate.x, self.coordinate.y + 1)
         elif direction == 'v':
-            self.coordinate.y -= 1
+            self.coordinate = Coordinate(self.coordinate.x, self.coordinate.y - 1)
         elif direction == '<':
-            self.coordinate.x -= 1
+            self.coordinate = Coordinate(self.coordinate.x - 1, self.coordinate.y)
         elif direction == '>':
-            self.coordinate.x += 1
+            self.coordinate = Coordinate(self.coordinate.x + 1, self.coordinate.y)
         self.add_house()
         return self.get_house()
     def get_visited_houses(self):
