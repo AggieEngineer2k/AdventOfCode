@@ -42,26 +42,30 @@ class Script:
             return neighbors_on == 3
     def get_new_array(self, array : "list[list[bool]]", corners : bool = False) -> "list[list[bool]]":
         rows = len(array)
-        colums = len(array[0])
-        new_array = [[None for c in range(colums)] for r in range(rows)]
+        columns = len(array[0])
+        if corners == True:
+            array[0][0] = True
+            array[0][columns-1] = True
+            array[rows-1][0] = True
+            array[rows-1][columns-1] = True
+        new_array = [[None for c in range(columns)] for r in range(rows)]
         for row in range(rows):
-            for col in range(colums):
+            for col in range(columns):
                 neighbors = self.get_neighbor_values(row, col, array)
                 new_array[row][col] = self.get_new_state(array[row][col], neighbors)
-                if corners and ( \
-                    (row == 0 and col == 0) \
+                if corners == True:
+                    if (row == 0 and col == 0) \
                     or (row == rows-1 and col == 0) \
-                    or (row == 0 and col == colums-1) \
-                    or (row == rows-1 and col == colums-1)):
-                    new_array[row][col] = True
+                    or (row == 0 and col == columns-1) \
+                    or (row == rows-1 and col == columns-1):
+                        new_array[row][col] = True
         return new_array
     def count_lights_on(self, array : "list[list[bool]]") -> int:
         return sum(1 for row in range(len(array)) for col in range(len(array[0])) if array[row][col] == True)
     def print_array(self, array : "list[list[bool]]"):
-        for row in array:
-            for col in row:
-                print('#' if col == True else '.', end = ' ')
-            print()
+        print('=== START ===')
+        print('\n'.join([''.join(['#' if item == True else '.' for item in row]) for row in array]))
+        print('=== END ===')
     def day_1(self):
         array = self.parse_input(self.input)
         for i in range(100):
@@ -70,9 +74,9 @@ class Script:
         print(f"Day 1: {lights_on}")
     def day_2(self):
         array = self.parse_input(self.input)
-        for i in range(3):
+        for i in range(100):
             array = self.get_new_array(array, corners=True)
-            self.print_array(array)
+            #self.print_array(array)
         lights_on = self.count_lights_on(array)
         print(f"Day 2: {lights_on}")
 
