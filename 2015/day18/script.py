@@ -55,17 +55,25 @@ class Script:
                     or (row == rows-1 and col == colums-1)):
                     new_array[row][col] = True
         return new_array
+    def count_lights_on(self, array : "list[list[bool]]") -> int:
+        return sum(1 for row in range(len(array)) for col in range(len(array[0])) if array[row][col] == True)
+    def print_array(self, array : "list[list[bool]]"):
+        for row in array:
+            for col in row:
+                print('#' if col == True else '.', end = ' ')
+            print()
     def day_1(self):
         array = self.parse_input(self.input)
         for i in range(100):
             array = self.get_new_array(array)
-        lights_on = sum(1 for row in range(len(array)) for col in range(len(array[0])) if array[row][col] == True)
+        lights_on = self.count_lights_on(array)
         print(f"Day 1: {lights_on}")
     def day_2(self):
         array = self.parse_input(self.input)
-        for i in range(100):
+        for i in range(3):
             array = self.get_new_array(array, corners=True)
-        lights_on = sum(1 for row in range(len(array)) for col in range(len(array[0])) if array[row][col] == True)
+            self.print_array(array)
+        lights_on = self.count_lights_on(array)
         print(f"Day 2: {lights_on}")
 
 input_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ),'input.txt'))
