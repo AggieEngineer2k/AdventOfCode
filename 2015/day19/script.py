@@ -3,7 +3,7 @@ import sys
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)),os.pardir,os.pardir))
 from common.input_parser import InputParser
 import logging
-logging.basicConfig(level=logging.WARNING)
+logging.basicConfig(level=logging.DEBUG)
 import re
 from common.graph import Graph
 
@@ -34,11 +34,11 @@ class Script:
         for i in range(len(medicine)):
             if medicine[i] in replacements.keys():
                 for replacement in replacements[medicine[i]]:
+                    logging.debug(f"{i:3} {''.join(medicine[:i]) + ' (' + medicine[i] + '=>' + replacement + ') ' + ''.join(medicine[i+1:])}")
                     new_molecule = ''.join(medicine[:i]) + replacement + ''.join(medicine[i+1:])
-                    logging.debug(f"{i:3} {new_molecule}")
                     molecules.add(new_molecule)
             else:
-                logging.debug(f"{i:3} {''.join(medicine[:i]) + '_' + medicine[i] + '_' + ''.join(medicine[i+1:])}")
+                logging.debug(f"{i:3} {''.join(medicine[:i]) + ' (' + medicine[i] + ') ' + ''.join(medicine[i+1:])}")
         return molecules
     def generate_all_molecules(self, medicine : "list[str]", replacements : dict, molecules : set, molecule : str = "", index : int = 0):
         element = medicine[index]
