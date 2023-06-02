@@ -15,8 +15,10 @@ def test_script_parse_input():
     actual = script.parse_input(input)
     assert type(actual[0]) is dict
     assert type(actual[1]) is str
+    assert type(actual[2]) is dict
     assert actual[0] == {"H":["HO","OH"],"O":["HH"]}
     assert actual[1] == "HOHOHO"
+    assert actual[2] == {"HO":["H"],"OH":["H"],"HH":["O"]}
 
 @pytest.mark.parametrize('input,expected', [
     ('HOH',['H','O','H']),
@@ -38,11 +40,22 @@ def test_script_generate_one_off_molecules(formula : "list[str]", replacements :
     actual = script.generate_one_off_molecules(formula, replacements)
     assert actual == expected
 
-@pytest.mark.parametrize('formula,replacements,expected', [
-    (['H','O','H'],{"H":["HO","OH"],"O":["HH"]},{"HOH","HOOH","HOHO","OHOH","HHHH","HOHHH","OHHHH","HHHHO","HHHOH","HOOHO","HOOOH","OHOHO","OHOOH","HOHHHO","HOHHOH","OHHHHO","OHHHOH"}),
+@pytest.mark.parametrize('medicine,reverse_replacements,expected', [
+    ("HOOH",{"HO":["H"],"OH":["H"],"HH":["O"]},{"HOH"}),
+    ("OHOH",{"HO":["H"],"OH":["H"],"HH":["O"]},{"HOH","OHH"}),
+    ("HHHH",{"HO":["H"],"OH":["H"],"HH":["O"]},{"HOH","HHO","OHH"}),
+    ("HOHO",{"HO":["H"],"OH":["H"],"HH":["O"]},{"HOH","HHO"}),
 ])
-def test_script_generate_all_molecules(formula : "list[str]", replacements : dict, expected : set):
-    molecules = set()
+def test_script_generate_one_off_source_molecules(medicine : str, reverse_replacements : dict, expected : set):
     script = Script()
-    script.generate_all_molecules(formula, replacements, molecules)
-    assert molecules == expected
+    actual = script.generate_one_off_source_molecules(medicine, reverse_replacements)
+    assert actual == expected
+
+# @pytest.mark.parametrize('formula,replacements,expected', [
+#     (['H','O','H'],{"H":["HO","OH"],"O":["HH"]},{"HOH","HOOH","HOHO","OHOH","HHHH","HOHHH","OHHHH","HHHHO","HHHOH","HOOHO","HOOOH","OHOHO","OHOOH","HOHHHO","HOHHOH","OHHHHO","OHHHOH"}),
+# ])
+# def test_script_generate_all_molecules(formula : "list[str]", replacements : dict, expected : set):
+#     molecules = set()
+#     script = Script()
+#     script.generate_all_molecules(formula, replacements, molecules)
+#     assert molecules == expected
