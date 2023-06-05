@@ -3,7 +3,7 @@ import sys
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)),os.pardir,os.pardir))
 from common.input_parser import InputParser
 import logging
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.WARNING)
 import itertools,re,math
 
 class Item:
@@ -120,13 +120,13 @@ class Script:
         players = [Combatant(100,i['+damage'],i['+armor'],i['cost']) for i in inventories]
         winners = [p for p in players if p.wins_against(self.boss)]
         winners = sorted(winners, key=lambda x: x.cost)
-        print(f"Day 1: {winners[0]}")
+        print(f"Day 1: {winners[0].cost}")
     def day_2(self):
         inventories = self.get_inventories()
         players = [Combatant(100,i['+damage'],i['+armor'],i['cost']) for i in inventories]
         lossers = [p for p in players if not p.wins_against(self.boss)]
         loosers = sorted(lossers, key=lambda x: x.cost, reverse=True)
-        print(f"Day 2: {loosers[0]}")
+        print(f"Day 2: {loosers[0].cost}")
 
 input_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ),'input.txt'))
 input = InputParser.parse_lines(input_path)
