@@ -15,23 +15,28 @@ class Keypad:
         self.buttons = buttons
         self.row = row
         self.column = column
+        logging.info(f"Keypad is {len(self.buttons)} by {len(self.buttons[0])}.")
     def move(self, direction : str):
+        start_row = self.row
+        start_column = self.column
+        start_button = self.getButton()
         if direction == 'U':
             self.row = max(0, self.row - 1)
-            # if self.getButton() == EDGE:
-            #     self.row = self.row + 1
+            if self.getButton() == EDGE:
+                self.row = self.row + 1
         elif direction == 'D':
-            self.row = min(2, self.row + 1)
-            # if self.getButton() == EDGE:
-            #     self.row = self.row - 1
+            self.row = min(len(self.buttons[0]) - 1, self.row + 1)
+            if self.getButton() == EDGE:
+                self.row = self.row - 1
         elif direction == 'L':
             self.column = max(0, self.column - 1)
-            # if self.getButton() == EDGE:
-            #     self.row = self.column + 1
+            if self.getButton() == EDGE:
+                self.column = self.column + 1
         elif direction == 'R':
-            self.column = min(2, self.column + 1)
-            # if self.getButton() == EDGE:
-            #     self.row = self.column - 1
+            self.column = min(len(self.buttons) - 1, self.column + 1)
+            if self.getButton() == EDGE:
+                self.column = self.column - 1
+        logging.debug(f"'{direction}' from '{start_button}' at [{start_row}][{start_column}] to '{self.getButton()}' at [{self.row}][{self.column}].")
     def getButton(self) -> str :
         return self.buttons[self.row][self.column]
     def getCode(self, instructions : "list(list(str))"):
